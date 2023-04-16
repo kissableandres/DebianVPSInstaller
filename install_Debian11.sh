@@ -70,8 +70,14 @@ COMMENT
 #	'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 declare -a dirs=(
 	"/$SERVERDIRECTORY"
-	"/$SERVERDIRECTORY/dir1"
-	"/$SERVERDIRECTORY/dir2/subdir1"
+	"/$SERVERDIRECTORY/www"
+	"/$SERVERDIRECTORY/installed"
+	"/$SERVERDIRECTORY/ssl"
+	"/$SERVERDIRECTORY/logs"
+	"/$SERVERDIRECTORY/vendor"
+	"/$SERVERDIRECTORY/vendor/apache24"
+	#"/$SERVERDIRECTORY/dir1"
+	#"/$SERVERDIRECTORY/dir2/subdir1"
 )
 
 for dir in "${dirs[@]}"
@@ -476,8 +482,14 @@ Include ports.conf
 	Require all granted
 </Directory>
 
+<Directory /var/www/html>
+	Options -Indexes
+	AllowOverride All
+	Require all granted
+</Directory>
+
 <Directory /'$SERVERDIRECTORY'/www>
-	Options +Indexes
+	Options -Indexes
 	AllowOverride All
 	Require all granted
 </Directory>
@@ -614,6 +626,7 @@ echo '<IfModule mod_rewrite.c>
 
 </IfModule>' > /$SERVERDIRECTORY/www/.htaccess
 	chown "www-data:www-data" /$SERVERDIRECTORY/www/.htaccess
+	cp /$SERVERDIRECTORY/www/.htaccess /var/www/html/.htaccess
 	echo "Se ha creado el archivo httacess" > /$SERVERDIRECTORY/installed/$FILE_INSTALLED_NAME
 fi
 
